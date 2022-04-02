@@ -26,15 +26,16 @@ function updateCell(event) {
   
   if (target.tagName === "TD" && target.innerText === "") {
     target.innerText = currentPlayer;
+    //update board array 
+    gameState.board[parent.dataset.index][target.dataset.index] = currentPlayer;
+    //reverse players array to change first player
+    gameState.players.reverse();
   }
-    
-  //console.log(target.dataset.index);
-  //console.log(parent.dataset.index);
-  gameState.board[parent.dataset.index][target.dataset.index] = currentPlayer;
   console.log(gameState);
-
-  //reverse players array
-  gameState.players.reverse();
 }
 
 gameBoardTable.addEventListener('click', updateCell);
+
+// Game Validator Function
+
+
