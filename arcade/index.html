@@ -20,22 +20,36 @@
         </section>
         <section id="section-player-names" class="hide">
             <form id="form-player-one-name">
-                <label for="input-player-one-name">Player 1:</label>
+                <label for="input-player-one-name">First Player:</label>
                 <input type="text" name="input-player-one-name" id="input-player-one-name">
                 <button>Enter Name</button>
             </form>
             <form id="form-player-two-name" class="hide">
-                <label for="input-player-two-name">Player 2:</label>
+                <label for="input-player-two-name">Second Player:</label>
                 <input type="text" name="input-player-two-name" id="input-player-two-name">
-                <button>Enter Name &amp; Start Game!</button>
+                <button>Enter Name</button>
             </form>
         </section>
         <section class="hide" id="section-start-game">
             <button>Start Game</button>
         </section>
-        <section>
+        <section id="section-table" class="hide">
             <table>
-                <!-- Game Board Goes Here-->
+                <tr data-index="0">
+                    <td data-index="0" id="c-00"></td>
+                    <td data-index="1" id="c-01"></td>
+                    <td data-index="2" id="c-02"></td>
+                </tr>
+                <tr data-index="1">
+                    <td data-index="0" id="c-10"></td>
+                    <td data-index="1" id="c-11"></td>
+                    <td data-index="2" id="c-12"></td>
+                </tr>
+                <tr data-index="2">
+                    <td data-index="0" id="c-20"></td>
+                    <td data-index="1" id="c-21"></td>
+                    <td data-index="2" id="c-22"></td>
+                </tr>
             </table>
         </section>
         <section id="section-player-hints"></section>
