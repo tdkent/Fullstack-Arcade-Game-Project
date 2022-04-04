@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <link href="style.css" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>Tic Tac Toe</h1>
+    </header>
+    <main>
+        <section>
+            <form id="form-player-one-name">
+                <label for="player-one-name">Player 1:</label>
+                <input type="text" name="player-one-name" id="player-one-name">
+                <button>Enter Name</button>
+            </form>
+            <form id="form-player-two-name" class="hide">
+                <label for="player-two-name">Player 2:</label>
+                <input type="text" name="player-two-name" id="player-two-name">
+                <button>Enter Name &amp; Start Game!</button>
+            </form>
+        </section>
+        <section class="hide" id="start-game">
+            <button>Start Game</button>
+        </section>
+        <section>
+            <table>
+                <!-- Game Board Goes Here-->
+            </table>
+        </section>
+        <section id="player-hints"></section>
+    </main>
+    <footer>
+        &copy; Tim Kent
+    </footer>
+    <script src="app.js"></script>
+</body>
+</html>
