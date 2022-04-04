@@ -1,7 +1,9 @@
 // Starting Game State
 
 const gameState = {
-    players: ['x', 'o'],
+    onePlayerGame: null,
+    playerNames: [null, null],
+    playerMarks: ['x', 'o'],
     board: [
       [null, null, null],
       [null, null, null],
@@ -28,78 +30,21 @@ const buttonTwoPlayerGame = document.querySelector('#button-two-player-game');
   // Game Board
 const table = document.querySelector('table');
 
-
-
 // Create Elements
 
 const createSpan = document.createElement('span');
 
-// Empty Variables & Arrays
-
-let onePlayerGame;
-let playerNames = [];
-
-// Event Listeners
-  // Select Game Mode
-
-buttonOnePlayerGame.addEventListener('click', function() {
-    onePlayerGame = true;
-    toggleStartingSections();
-});
-
-buttonTwoPlayerGame.addEventListener('click', function() {
-    onePlayerGame = false;
-    toggleStartingSections();
-});
-
-  //Name Entry -- Player 1
-
-formPlayerOneName.addEventListener('submit', function(event) {
-    event.preventDefault();
-    playerNames.push(inputPlayerOneName.value);
-    formPlayerOneName.classList.toggle('hide');
-    if (!onePlayerGame) {
-        formPlayerTwoName.classList.toggle('hide');
-    } 
-    else {
-        renderStartingBoard();
-    }
-  });
-
-  // Name Entry -- Player 2
-  
-formPlayerTwoName.addEventListener('submit', function(event) {
-    event.preventDefault();
-    playerNames.push(inputPlayerTwoName.value);
-    formPlayerTwoName.classList.toggle('hide');
-    console.log(playerNames);
-    renderStartingBoard();
-  });
-
-
 // Helper Functions
   // Game Mode Select
 
-  let toggleStartingSections = () => {
+let toggleStartingSections = () => {
     sectionSelectGameMode.classList.toggle('hide');
     sectionPlayerNames.classList.toggle('hide');
 };  
 
   // Render Starting Board
-  // Game Turns
-    // One Player
 
-function updateCell(event) {
-    let currentPlayer = gameState.players[0];
-    const target = event.target;
-    const parent = event.target.parentNode;
-    if (target.tagName === "TD" && target.innerText === "") {
-      target.innerText = currentPlayer;
-      gameState.board[parent.dataset.index][target.dataset.index] = currentPlayer;
-      gameState.players.reverse();
-};
-
-function renderStartingBoard() {
+let renderStartingBoard = () => {
     let tableTemplate = '';
     for (let i = 0; i < gameState.board.length; i++) {
         const rowTemplate = `
@@ -112,16 +57,77 @@ function renderStartingBoard() {
         tableTemplate += rowTemplate;
     }
     table.innerHTML = tableTemplate;
-}
+};
 
+  // Game Turns
+    // One Player
 
+let onePlayerTurn = (event) => {
+    let currentPlayer = gameState.playerMarks[0];
+    const target = event.target;
+    const parent = event.target.parentNode;
+    if (target.tagName === "TD" && target.innerText === "") {
+        target.innerText = currentPlayer;
+        gameState.board[parent.dataset.index][target.dataset.index] = currentPlayer;
+        gameState.playerMarks.reverse();
+    }
+};
+    
+    // Two Player
 
-    
-    
-    
-}
+let twoPlayerTurn = event => {
+    let currentPlayer = gameState.playerMarks[0];
+    const target = event.target;
+    const parent = event.target.parentNode;
+    if (target.tagName === "TD" && target.innerText === "") {
+      target.innerText = currentPlayer;
+      gameState.board[parent.dataset.index][target.dataset.index] = currentPlayer;
+      gameState.playerMarks.reverse();
+    }
+};
+
+// Event Listeners
+  // Select Game Mode
+
+  buttonOnePlayerGame.addEventListener('click', function() {
+    gameState.onePlayerGame = true;
+    toggleStartingSections();
+});
+
+buttonTwoPlayerGame.addEventListener('click', function() {
+    gameState.onePlayerGame = false;
+    toggleStartingSections();
+});
+
+  // Name Entry -- Player 1
+
+formPlayerOneName.addEventListener('submit', function(event) {
+    event.preventDefault();
+    gameState.playerNames[0] = inputPlayerOneName.value;
+    formPlayerOneName.classList.toggle('hide');
+    if (!gameState.onePlayerGame) {
+        formPlayerTwoName.classList.toggle('hide');
+    } 
+    else {
+        renderStartingBoard();
+    }
+  });
+
+  // Name Entry -- Player 2
   
-table.addEventListener('click', updateCell);
+formPlayerTwoName.addEventListener('submit', function(event) {
+    event.preventDefault();
+    gameState.playerNames[1] = inputPlayerTwoName.value;
+    formPlayerTwoName.classList.toggle('hide');
+    renderStartingBoard();
+  });
+
+  // Game Turns
+
+table.addEventListener('click', onePlayerTurn);
+
+
+
 
 
     
