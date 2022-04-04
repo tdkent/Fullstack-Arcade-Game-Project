@@ -12,19 +12,25 @@
         <h1>Tic Tac Toe</h1>
     </header>
     <main>
-        <section>
+        <section id="select-game-mode">
+            <h4>Player vs. Computer</h4>
+            <button id="button-one-player-game">1-Player Game</button>
+            <h4>Player vs. Player</h4>
+            <button id="button-two-player-game">2-Player Game</button>
+        </section>
+        <section id="section-player-names" class="hide">
             <form id="form-player-one-name">
-                <label for="player-one-name">Player 1:</label>
-                <input type="text" name="player-one-name" id="player-one-name">
+                <label for="input-player-one-name">Player 1:</label>
+                <input type="text" name="input-player-one-name" id="input-player-one-name">
                 <button>Enter Name</button>
             </form>
             <form id="form-player-two-name" class="hide">
-                <label for="player-two-name">Player 2:</label>
-                <input type="text" name="player-two-name" id="player-two-name">
+                <label for="input-player-two-name">Player 2:</label>
+                <input type="text" name="input-player-two-name" id="input-player-two-name">
                 <button>Enter Name &amp; Start Game!</button>
             </form>
         </section>
-        <section class="hide" id="start-game">
+        <section class="hide" id="section-start-game">
             <button>Start Game</button>
         </section>
         <section>
@@ -32,7 +38,7 @@
                 <!-- Game Board Goes Here-->
             </table>
         </section>
-        <section id="player-hints"></section>
+        <section id="section-player-hints"></section>
     </main>
     <footer>
         &copy; Tim Kent
