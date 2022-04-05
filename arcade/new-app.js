@@ -5,6 +5,8 @@ const gameState = {
     playerNames: [null, null],
     playerMarks: ['x', 'o'],
     turn: 1,
+    isGameWon: false,
+    isGameTied: false,
     board: [
       [null, null, null],
       [null, null, null],
@@ -12,10 +14,13 @@ const gameState = {
     ]
   };
 
-// Empty Variables
+// Variables
+  // Empty
 
 let firstPlayer;
 let secondPlayer;
+
+  // Global
 
 // Select Elements
 
@@ -78,6 +83,101 @@ let playerOrder = () => {
   }
 };
 
+  // Game Validation
+    // Create Board Arrays
+
+function getRow(gameState, rowIndex) {
+  return gameState.board[rowIndex];
+};
+
+function getColumn(gameState, colIndex) {
+  let columnCreator = [];
+  for (let i = 0; i < gameState.board.length; ++i) {
+    let columnNumber = gameState.board[i];
+    columnCreator.push(columnNumber[colIndex]);
+  }
+  return columnCreator;
+};
+
+function getDiagonalLR(gameState) {
+  let diagLR = [];
+
+  for (let i = 0; i < gameState.board.length; i++) {
+    let row = gameState.board[i];
+    diagLR.push(row[i]);
+  }
+
+  return diagLR;
+}
+
+function getDiagonalRL(gameState) {
+  let diagRL = [];
+
+  for (let i = 0; i < gameState.board.length; i++) {
+    let row = gameState.board[i];
+    diagRL.push(row[(gameState.board.length - 1) - i]);
+  }
+
+  return diagRL;
+}
+
+    // Validation Method
+
+function checkRCD(array) {
+  let currentPlayerMark = gameState.playerMarks[0];
+  if (array.join('') === `${currentPlayerMark}${currentPlayerMark}${currentPlayerMark}`) {
+    return true;
+  } 
+  return false;
+};
+
+    // Validators
+
+function rowValidator(gameState) {
+  for (let i = 0; i < gameState.board.length; ++i) {
+    if (checkRCD(getRow(gameState, i))) {
+      gameState.isGameWon = true;
+    }
+  }
+};
+
+function columnValidator(gameState) {
+  for (let i = 0; i < gameState.board.length; ++i) {
+    if(checkRCD(getColumn(gameState, i))) {
+      gameState.isGameWon = true;
+    }
+  }
+};
+
+function diagLRValidator(gameState) {
+  if(checkRCD(getDiagonalLR(gameState))) {
+    gameState.isGameWon = true;
+  }
+};
+
+function diagRLValidator(gameState) {
+  if(checkRCD(getDiagonalRL(gameState))) {
+    gameState.isGameWon = true;
+  }
+};
+
+    // Run All Validators
+
+let validateBoard = () => {
+  if (gameState.turn > 4) {
+    rowValidator(gameState);
+    columnValidator(gameState);
+    diagLRValidator(gameState);
+    diagRLValidator(gameState);
+  }
+}
+
+  // Game End
+    // Game Win
+
+    // Game Tied
+    // if (gameState.turn = 10 && gameState.isGameWon === false) {...}
+
 // Events
   // Select Game Mode
     // 1-Player Game
@@ -134,64 +234,13 @@ let twoPlayerGameTurn = (event) => {
     const target = event.target;
     const parent = event.target.parentNode;
 
-    function getRow(gameState, rowIndex) {
-      return gameState.board[rowIndex];
-    };
-
-    function getColumn(gameState, colIndex) {
-      let columnCreator = [];
-      for (let i = 0; i < gameState.board.length; ++i) {
-        let columnNumber = gameState.board[i];
-        columnCreator.push(columnNumber[colIndex]);
-      }
-      return columnCreator;
-    };
-
-    function getDiagonalLR(gameState) {
-      let diagLR = [];
-
-      for (let i = 0; i < gameState.board.length; i++) {
-        let row = gameState.board[i];
-        diagonalCreator.push(row[i]);
-      }
-
-      return diagLR;
-    }
-
-    function checkRowAndColumn(array) {
-      if (array.join('') === `${currentPlayer}${currentPlayer}${currentPlayer}`) {
-        return true;
-      } 
-      return false;
-    };
-
-    function rowValidator(gameState) {
-      if (gameState.turn > 4) {
-        for (let i = 0; i < gameState.board.length; ++i) {
-          if (checkRowAndColumn(getRow(gameState, i))) {
-            console.log('You win')
-          }
-        }
-      }
-    };
-
-    function columnValidator(gameState) {
-      for (let i = 0; i < gameState.board.length; ++i) {
-        if(checkRowAndColumn(getColumn(gameState, i))) {
-          console.log('You win');
-        }
-      }
-    };
-
     if (!gameState.onePlayerGame) {
         if (target.tagName === "TD" && target.innerText === "") {
             gameState.turn += 1;
             target.innerText = currentPlayer;
             gameState.board[parent.dataset.index][target.dataset.index] = currentPlayer;
             
-            rowValidator(gameState);
-            columnValidator(gameState);
-            //diagonals validation
+            validateBoard();
 
             gameState.playerMarks.reverse();
             if (gameState.turn % 2 === 0) {
