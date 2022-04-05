@@ -133,12 +133,66 @@ let twoPlayerGameTurn = (event) => {
     let currentPlayer = gameState.playerMarks[0];
     const target = event.target;
     const parent = event.target.parentNode;
+
+    function getRow(gameState, rowIndex) {
+      return gameState.board[rowIndex];
+    };
+
+    function getColumn(gameState, colIndex) {
+      let columnCreator = [];
+      for (let i = 0; i < gameState.board.length; ++i) {
+        let columnNumber = gameState.board[i];
+        columnCreator.push(columnNumber[colIndex]);
+      }
+      return columnCreator;
+    };
+
+    function getDiagonalLR(gameState) {
+      let diagLR = [];
+
+      for (let i = 0; i < gameState.board.length; i++) {
+        let row = gameState.board[i];
+        diagonalCreator.push(row[i]);
+      }
+
+      return diagLR;
+    }
+
+    function checkRowAndColumn(array) {
+      if (array.join('') === `${currentPlayer}${currentPlayer}${currentPlayer}`) {
+        return true;
+      } 
+      return false;
+    };
+
+    function rowValidator(gameState) {
+      if (gameState.turn > 4) {
+        for (let i = 0; i < gameState.board.length; ++i) {
+          if (checkRowAndColumn(getRow(gameState, i))) {
+            console.log('You win')
+          }
+        }
+      }
+    };
+
+    function columnValidator(gameState) {
+      for (let i = 0; i < gameState.board.length; ++i) {
+        if(checkRowAndColumn(getColumn(gameState, i))) {
+          console.log('You win');
+        }
+      }
+    };
+
     if (!gameState.onePlayerGame) {
         if (target.tagName === "TD" && target.innerText === "") {
             gameState.turn += 1;
             target.innerText = currentPlayer;
             gameState.board[parent.dataset.index][target.dataset.index] = currentPlayer;
-            // Validation Goes Here
+            
+            rowValidator(gameState);
+            columnValidator(gameState);
+            //diagonals validation
+
             gameState.playerMarks.reverse();
             if (gameState.turn % 2 === 0) {
                 createSpan.innerText = `Turn ${gameState.turn}: ${firstPlayer} just placed an '${gameState.playerMarks[1].toUpperCase()}'. ${secondPlayer}, it's your turn next. Place your ${gameState.playerMarks[0].toUpperCase()} on the board!`;
