@@ -26,48 +26,44 @@ let secondPlayer;
 
   // Sections
 
-  const sectionSelectGameMode = document.querySelector('#select-game-mode');
-  const sectionPlayerNames = document.querySelector('#section-player-names');
-  const sectionTable = document.querySelector('#section-table');
-  const sectionPlayerHints = document.querySelector('#section-player-hints');
+const sectionSelectGameMode = document.querySelector('#select-game-mode');
+const sectionPlayerOneName = document.querySelector('#section-player-one-name');
+const sectionPlayerTwoName = document.querySelector('#section-player-two-name');
+const sectionTable = document.querySelector('#section-table');
+const sectionPlayerHints = document.querySelector('#section-player-hints');
+const sectionResetGame = document.querySelector('#section-reset-game');
 
     // Forms
 
-  const formPlayerOneName = document.querySelector('#form-player-one-name');
-  const formPlayerTwoName = document.querySelector('#form-player-two-name');
-  const inputPlayerOneName = document.querySelector('#input-player-one-name');
-  const inputPlayerTwoName = document.querySelector('#input-player-two-name');
+const formPlayerOneName = document.querySelector('#form-player-one-name');
+const formPlayerTwoName = document.querySelector('#form-player-two-name');
+const inputPlayerOneName = document.querySelector('#input-player-one-name');
+const inputPlayerTwoName = document.querySelector('#input-player-two-name');
 
     // Buttons
 
-  const buttonOnePlayerGame = document.querySelector('#button-one-player-game');
-  const buttonTwoPlayerGame = document.querySelector('#button-two-player-game'); 
+const buttonOnePlayerGame = document.querySelector('#button-one-player-game');
+const buttonTwoPlayerGame = document.querySelector('#button-two-player-game'); 
 
     // Table
 
-  const table = document.querySelector('table');
-  const td00 = document.querySelector('#c-00');
-  const td01 = document.querySelector('#c-01');
-  const td02 = document.querySelector('#c-02');
-  const td10 = document.querySelector('#c-10');
-  const td11 = document.querySelector('#c-11');
-  const td12 = document.querySelector('#c-12');
-  const td20 = document.querySelector('#c-20');
-  const td21 = document.querySelector('#c-21');
-  const td22 = document.querySelector('#c-22');
+const table = document.querySelector('table');
+const td = document.querySelectorAll('td');
+const td00 = document.querySelector('#c-00');
+const td01 = document.querySelector('#c-01');
+const td02 = document.querySelector('#c-02');
+const td10 = document.querySelector('#c-10');
+const td11 = document.querySelector('#c-11');
+const td12 = document.querySelector('#c-12');
+const td20 = document.querySelector('#c-20');
+const td21 = document.querySelector('#c-21');
+const td22 = document.querySelector('#c-22');
 
 // Create Elements
 
 const createSpan = document.createElement('span');
 
 // Helper Functions
-  // Game Mode Select
-
-let toggleStartingSections = () => {
-    sectionSelectGameMode.classList.toggle('hide');
-    sectionPlayerNames.classList.toggle('hide');
-};
-
   // Choose Player Order
 
 let playerOrder = () => {
@@ -175,8 +171,20 @@ let validateBoard = () => {
   // Game End
     // Game Win
 
+let isGameWon = () => {
+  if (gameState.isGameWon) {
+    createSpan.innerText = `${firstPlayer} wins the game! Play again?`;
+    sectionPlayerHints.appendChild(createSpan);
+
+  }
+}  
     // Game Tied
-    // if (gameState.turn = 10 && gameState.isGameWon === false) {...}
+let isGameTied = () =>  {
+  if (gameState.turn === 10 && !gameState.isGameWon) {
+    gameState.isGameTied = true;
+    console.log('game tied')
+  }
+} 
 
 // Events
   // Select Game Mode
@@ -184,74 +192,120 @@ let validateBoard = () => {
 
 buttonOnePlayerGame.addEventListener('click', function() {
     gameState.onePlayerGame = true;
-    toggleStartingSections();
+    sectionSelectGameMode.classList.toggle('hide');
+    sectionPlayerOneName.classList.toggle('hide');
 });
     
     // 2-Player Game
     
 buttonTwoPlayerGame.addEventListener('click', function() {
     gameState.onePlayerGame = false;
-    toggleStartingSections();
+    sectionSelectGameMode.classList.toggle('hide');
+    sectionPlayerOneName.classList.toggle('hide');
 });
 
   // Name Entry
     // Player 1
 
-  formPlayerOneName.addEventListener('submit', function(event) {
-    event.preventDefault();
-    gameState.playerNames[0] = inputPlayerOneName.value;
-    formPlayerOneName.classList.toggle('hide');
-    if (!gameState.onePlayerGame) {
-      formPlayerTwoName.classList.toggle('hide');
-    } 
-    else {
-      gameState.playerNames[1] = 'COMPUTER';
-      console.log(gameState.playerNames);
-      playerOrder();
-      console.log(`1st player is ${firstPlayer}, 2nd player is ${secondPlayer}`);
-      sectionTable.classList.toggle('hide');
+sectionPlayerOneName.addEventListener('submit', function(event) {
+  event.preventDefault();
+  gameState.playerNames[0] = inputPlayerOneName.value;
+  inputPlayerOneName.value = "";
+  sectionPlayerOneName.classList.toggle('hide');
+  if (!gameState.onePlayerGame) {
+    sectionPlayerTwoName.classList.toggle('hide');
+  } 
+  else {
+    gameState.playerNames[1] = 'COMPUTER';
+    console.log(gameState.playerNames);
+    playerOrder();
+    console.log(`1st player is ${firstPlayer}, 2nd player is ${secondPlayer}`);
+    sectionTable.classList.toggle('hide');
+    sectionPlayerHints.classList.toggle('hide');
     }
   });
 
     // Player 2
   
-formPlayerTwoName.addEventListener('submit', function(event) {
+sectionPlayerTwoName.addEventListener('submit', function(event) {
     event.preventDefault();
     gameState.playerNames[1] = inputPlayerTwoName.value;
+    inputPlayerTwoName.value = "";
     playerOrder();
     console.log(`1st player is ${firstPlayer}, 2nd player is ${secondPlayer}`);
-    formPlayerTwoName.classList.toggle('hide');
+    sectionPlayerTwoName.classList.toggle('hide');
     sectionTable.classList.toggle('hide');
+    sectionPlayerHints.classList.toggle('hide');
     createSpan.innerText = `Welcome to Tic-Tac-Toe! To win the game, race to be the first to have your marks fill a row, column or diagonal! ${firstPlayer} is '${gameState.playerMarks[0].toUpperCase()}'s and gets to go first. ${secondPlayer} is '${gameState.playerMarks[1].toUpperCase()}'s and takes second turn. Turn 1: Begin!`;
     sectionPlayerHints.appendChild(createSpan);
+    sectionResetGame.classList.toggle('hide');
   });
 
     // Game Turns
       // 2-Player Game
 
 let twoPlayerGameTurn = (event) => {
-    let currentPlayer = gameState.playerMarks[0];
-    const target = event.target;
-    const parent = event.target.parentNode;
+  let currentPlayer = gameState.playerMarks[0];
+  const target = event.target;
+  const parent = event.target.parentNode;
 
-    if (!gameState.onePlayerGame) {
-        if (target.tagName === "TD" && target.innerText === "") {
-            gameState.turn += 1;
-            target.innerText = currentPlayer;
-            gameState.board[parent.dataset.index][target.dataset.index] = currentPlayer;
+  if (!gameState.onePlayerGame && !gameState.isGameWon) {
+    if (target.tagName === "TD" && target.innerText === "") {
+      gameState.turn += 1;
+      target.innerText = currentPlayer;
+      gameState.board[parent.dataset.index][target.dataset.index] = currentPlayer;
             
-            validateBoard();
+      validateBoard();
+      isGameWon();
+      isGameTied();
 
-            gameState.playerMarks.reverse();
-            if (gameState.turn % 2 === 0) {
-                createSpan.innerText = `Turn ${gameState.turn}: ${firstPlayer} just placed an '${gameState.playerMarks[1].toUpperCase()}'. ${secondPlayer}, it's your turn next. Place your ${gameState.playerMarks[0].toUpperCase()} on the board!`;
-            }
-            else {
-                createSpan.innerText = `Turn ${gameState.turn}: ${secondPlayer} just placed an '${gameState.playerMarks[1].toUpperCase()}'. ${firstPlayer}, it's your turn next. Place your ${gameState.playerMarks[0].toUpperCase()} on the board!`;
-            }
-            sectionPlayerHints.appendChild(createSpan);
+      gameState.playerMarks.reverse();
+      if (!gameState.isGameTied && !gameState.isGameWon) {
+        if (gameState.turn % 2 === 0) {
+          createSpan.innerText = `Turn ${gameState.turn}: ${firstPlayer} just placed an '${gameState.playerMarks[1].toUpperCase()}'. ${secondPlayer}, it's your turn next. Place your ${gameState.playerMarks[0].toUpperCase()} on the board!`;
         }
+        else {
+          createSpan.innerText = `Turn ${gameState.turn}: ${secondPlayer} just placed an '${gameState.playerMarks[1].toUpperCase()}'. ${firstPlayer}, it's your turn next. Place your ${gameState.playerMarks[0].toUpperCase()} on the board!`;
+        }
+        sectionPlayerHints.appendChild(createSpan);
+      }
+      if(gameState.isGameTied) {
+        createSpan.innerText = `The game has ended in a tie. Play again?`;
+        sectionPlayerHints.appendChild(createSpan);
+      }
     }
-}
+  }
+};
 
 table.addEventListener('click', twoPlayerGameTurn);
+
+  // Game Reset
+  
+  let resetGame = () => {
+    
+    gameState.onePlayerGame = null;
+    gameState.playerNames = [null, null];
+    gameState.playerMarks = ['x', 'o'];
+    gameState.turn = 1;
+    gameState.isGameWon = false;
+    gameState.isGameTied = false;
+    gameState.board = [[null, null, null], [null, null, null], [null, null, null]];
+
+    td00.innerText = "";
+    td01.innerText = "";
+    td02.innerText = "";
+    td10.innerText = "";
+    td11.innerText = "";
+    td12.innerText = "";
+    td20.innerText = "";
+    td21.innerText = "";
+    td22.innerText = "";
+    
+    sectionSelectGameMode.classList.toggle('hide');
+    sectionTable.classList.toggle('hide');
+    sectionPlayerHints.classList.toggle('hide');
+    sectionResetGame.classList.toggle('hide');
+
+  }
+
+  sectionResetGame.addEventListener('click', resetGame);

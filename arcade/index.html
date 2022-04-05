@@ -18,13 +18,15 @@
             <h4>Player vs. Player</h4>
             <button id="button-two-player-game">2-Player Game</button>
         </section>
-        <section id="section-player-names" class="hide">
+        <section id="section-player-one-name" class="hide">
             <form id="form-player-one-name">
                 <label for="input-player-one-name">First Player:</label>
                 <input type="text" name="input-player-one-name" id="input-player-one-name">
                 <button>Enter Name</button>
             </form>
-            <form id="form-player-two-name" class="hide">
+        </section>
+        <section id="section-player-two-name" class="hide">
+            <form id="form-player-two-name">
                 <label for="input-player-two-name">Second Player:</label>
                 <input type="text" name="input-player-two-name" id="input-player-two-name">
                 <button>Enter Name</button>
@@ -52,7 +54,10 @@
                 </tr>
             </table>
         </section>
-        <section id="section-player-hints"></section>
+        <section id="section-player-hints" class="hide"></section>
+        <section id="section-reset-game" class="hide">
+            <button>Reset Game</button>
+        </section>
     </main>
     <footer>
         &copy; Tim Kent
