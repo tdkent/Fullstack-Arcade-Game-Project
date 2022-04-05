@@ -202,13 +202,16 @@ let onePlayerTurn = (event) => {
     //}
 //};
 
-// Event Listeners
+// Events
   // Select Game Mode
+    // 1-Player Game
 
-  buttonOnePlayerGame.addEventListener('click', function() {
+buttonOnePlayerGame.addEventListener('click', function() {
     gameState.onePlayerGame = true;
     toggleStartingSections();
 });
+
+    // 2-Player Game
 
 buttonTwoPlayerGame.addEventListener('click', function() {
     gameState.onePlayerGame = false;
