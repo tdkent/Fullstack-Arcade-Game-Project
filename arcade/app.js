@@ -14,9 +14,7 @@ const gameState = {
 
 let firstPlayer;
 let secondPlayer;
-let cellIsEmpty;
-let randomRow;
-let randomCell;
+
 
 // Select Elements
   // Sections
@@ -24,7 +22,6 @@ const sectionSelectGameMode = document.querySelector('#select-game-mode');
 const sectionPlayerNames = document.querySelector('#section-player-names');
 const sectionTable = document.querySelector('#section-table');
 const sectionPlayerHints = document.querySelector('#section-player-hints');
-const sectionStartGame = document.querySelector('#section-start-game');
   // Forms
 const formPlayerOneName = document.querySelector('#form-player-one-name');
 const formPlayerTwoName = document.querySelector('#form-player-two-name');
@@ -33,7 +30,6 @@ const inputPlayerTwoName = document.querySelector('#input-player-two-name');
   // Buttons
 const buttonOnePlayerGame = document.querySelector('#button-one-player-game');
 const buttonTwoPlayerGame = document.querySelector('#button-two-player-game'); 
-
 
   // Table
 const table = document.querySelector('table');
@@ -62,32 +58,34 @@ let toggleStartingSections = () => {
   // Choose Player Order
 
 let playerOrder = () => {
-  if (Math.round(Math.random()) === 0) {
-    firstPlayer = gameState.playerNames[0];
-    secondPlayer = gameState.playerNames[1];
-  }
-  else if (Math.round(Math.random()) === 1) {
-    firstPlayer = gameState.playerNames[1];
-    secondPlayer = gameState.playerNames[0];
+  if(gameState.onePlayerGame === false) {
+    if (Math.round(Math.random()) === 0) {
+      firstPlayer = gameState.playerNames[0];
+      secondPlayer = gameState.playerNames[1];
+    }
+    else if (Math.round(Math.random()) === 1) {
+      firstPlayer = gameState.playerNames[1];
+      secondPlayer = gameState.playerNames[0];
+    }
   }
 };
 
   // Render Starting Board
 
-let = () => {
-    let tableTemplate = '';
-    for (let i = 0; i < gameState.board.length; i++) {
-        const rowTemplate = `
-            <tr data-index = "${i}">
-                <td data-index = "0"></td>
-                <td data-index = "1"></td>
-                <td data-index = "2"></td>
-            </tr>
-        `
-      tableTemplate += rowTemplate;
-    }
-    table.innerHTML = tableTemplate;
-};
+//let = () => {
+//    let tableTemplate = '';
+//    for (let i = 0; i < gameState.board.length; i++) {
+//        const rowTemplate = `
+//            <tr data-index = "${i}">
+//                <td data-index = "0"></td>
+//                <td data-index = "1"></td>
+//                <td data-index = "2"></td>
+//            </tr>
+ //       `
+//      tableTemplate += rowTemplate;
+//    }
+//    table.innerHTML = tableTemplate;
+//};
 
   // Game Turns
     // Generate Random Array Values
@@ -97,25 +95,30 @@ let = () => {
   //let generateRandomCell = () => Math.floor(Math.random() * gameState.board.length);
 
     // One Player
-let newRandomRow = () => Math.floor(Math.random() * gameState.board.length);
-let newRandomCell = () => Math.floor(Math.random() * gameState.board.length);
-let isCellEmpty = () => {
-  randomRow = newRandomRow();
-  randomCell = newRandomCell();
-  if (gameState.board[randomRow][randomCell] !== null) {
-    cellIsEmpty = false;
-  }
-  else if (gameState.board[randomRow][randomCell] === null) {
-    cellIsEmpty = true;
-  }
-};
+
 
 let computerTurn = () => {
-  //let randomRow = Math.floor(Math.random() * gameState.board.length);
-  //let randomCell = Math.floor(Math.random() * gameState.board.length);
-  //let randomRow = generateRandomRow();
-  //let randomCell = generateRandomCell();
+  
+  let cellIsEmpty;
+  let randomRow;
+  let randomCell;
+  
+  let newRandomRow = () => Math.floor(Math.random() * gameState.board.length);
+  let newRandomCell = () => Math.floor(Math.random() * gameState.board.length);
+  
+  let isCellEmpty = () => {
+    randomRow = newRandomRow();
+    randomCell = newRandomCell();
+    if (gameState.board[randomRow][randomCell] !== null) {
+      cellIsEmpty = false;
+    }
+    else if (gameState.board[randomRow][randomCell] === null) {
+      cellIsEmpty = true;
+    }
+  };
+  
   isCellEmpty();
+  
   if (!cellIsEmpty) {
     isCellEmpty();
   }
@@ -150,7 +153,6 @@ let computerTurn = () => {
     }
   }
 };
-
 
 let onePlayerTurn = (event) => {
     let currentPlayer = gameState.playerMarks[0];
@@ -227,7 +229,6 @@ formPlayerOneName.addEventListener('submit', function(event) {
       console.log(gameState.playerNames);
       playerOrder();
       console.log(`1st player is ${firstPlayer}, 2nd player is ${secondPlayer}`);
-      //renderStartingBoard();
       sectionTable.classList.toggle('hide');
     }
   });
@@ -240,7 +241,6 @@ formPlayerTwoName.addEventListener('submit', function(event) {
     playerOrder();
     console.log(`1st player is ${firstPlayer}, 2nd player is ${secondPlayer}`);
     formPlayerTwoName.classList.toggle('hide');
-    //renderStartingBoard();
   });
 
   // Game Turns
