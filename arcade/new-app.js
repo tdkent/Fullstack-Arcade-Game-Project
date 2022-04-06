@@ -229,14 +229,14 @@ let computerTurn = () => {
         createSpan.innerText = `The game has ended in a tie. Play again?`;
         sectionPlayerHints.appendChild(createSpan);
       }
+
+    gameState.playerMarks.reverse();  
+
     }
 
     else {
       computerTurn();
     }
-    
-    gameState.playerMarks.reverse();
-
   }
 };
 
@@ -327,7 +327,7 @@ let onePlayerTurn = (event) => {
   let currentPlayer = gameState.playerMarks[0];
   const target = event.target;
   const parent = event.target.parentNode;
-
+  
   if (gameState.onePlayerGame) {
     if (!gameState.isGameWon) {
       if (target.tagName === "TD" && target.innerText === "") {
@@ -351,7 +351,7 @@ let onePlayerTurn = (event) => {
         }
       
         if (!gameState.isGameWon) {
-          setTimeout(() => {computerTurn()}, 2500);
+          setTimeout(() => {computerTurn()}, 3000);
         }
       }
     }
