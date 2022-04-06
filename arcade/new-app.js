@@ -4,23 +4,24 @@ const gameState = {
     onePlayerGame: null,
     playerNames: [null, null],
     playerMarks: ['x', 'o'],
+    playerOrder: {
+      firstPlayer: null,
+      secondPlayer: null
+    },
     turn: 1,
     isGameWon: false,
     isGameTied: false,
+    computerPlayer: {
+      isCellEmpty: null,
+      checkRow: null, 
+      checkCell: null
+    },
     board: [
       [null, null, null],
       [null, null, null],
       [null, null, null]
     ]
   };
-
-// Variables
-  // Empty
-
-let firstPlayer;
-let secondPlayer;
-
-  // Global
 
 // Select Elements
 
@@ -69,12 +70,12 @@ const createSpan = document.createElement('span');
 let playerOrder = () => {
   if(gameState.onePlayerGame === false) {
     if (Math.round(Math.random()) === 0) {
-      firstPlayer = gameState.playerNames[0];
-      secondPlayer = gameState.playerNames[1];
+      gameState.playerOrder.firstPlayer = gameState.playerNames[0];
+      gameState.playerOrder.secondPlayer = gameState.playerNames[1];
     }
     else if (Math.round(Math.random()) === 1) {
-      firstPlayer = gameState.playerNames[1];
-      secondPlayer = gameState.playerNames[0];
+      gameState.playerOrder.firstPlayer = gameState.playerNames[1];
+      gameState.playerOrder.secondPlayer = gameState.playerNames[0];
     }
   }
 };
@@ -168,16 +169,80 @@ let validateBoard = () => {
   }
 }
 
+  // Game Turns
+    // Computer
+
+let computerTurn = () => {
+  
+  let randomRow = gameState.computerPlayer.checkRow;
+  let randomCell = gameState.computerPlayer.checkCell;
+      
+  let newRandomRow = () => Math.floor(Math.random() * gameState.board.length);
+  let newRandomCell = () => Math.floor(Math.random() * gameState.board.length);
+      
+  let isCellEmpty = () => {
+    randomRow = newRandomRow();
+    randomCell = newRandomCell();
+    if (gameState.board[randomRow][randomCell] !== null) {
+      gameState.computerPlayer.isCellEmpty = false;
+    }
+    else if (gameState.board[randomRow][randomCell] === null) {
+      gameState.computerPlayer.isCellEmpty = true;
+    }
+  };
+      
+  isCellEmpty();
+      
+  if (!gameState.computerPlayer.isCellEmpty) {
+    isCellEmpty();
+  }
+  if (gameState.computerPlayer.isCellEmpty) {
+    gameState.board[randomRow][randomCell] = gameState.playerMarks[0];
+    if (randomRow === 0 && randomCell === 0) {
+      td00.innerText = gameState.playerMarks[0];
+    }
+    if (randomRow === 0 && randomCell === 1) {
+      td01.innerText = gameState.playerMarks[0];
+    }
+    if (randomRow === 0 && randomCell === 2) {
+      td02.innerText = gameState.playerMarks[0];
+    }
+    if (randomRow === 1 && randomCell === 0) {
+      td10.innerText = gameState.playerMarks[0];
+    }
+    if (randomRow === 1 && randomCell === 1) {
+      td11.innerText = gameState.playerMarks[0];
+    }
+    if (randomRow === 1 && randomCell === 2) {
+      td12.innerText = gameState.playerMarks[0];
+    }
+    if (randomRow === 2 && randomCell === 0) {
+      td20.innerText = gameState.playerMarks[0];
+    }
+    if (randomRow === 2 && randomCell === 1) {
+      td21.innerText = gameState.playerMarks[0];
+    }
+    if (randomRow === 2 && randomCell === 2) {
+      td22.innerText = gameState.playerMarks[0];
+    }
+  }
+};
+
   // Game End
     // Game Win
 
 let isGameWon = () => {
   if (gameState.isGameWon) {
-    createSpan.innerText = `${firstPlayer} wins the game! Play again?`;
+    if (gameState.turn % 2 === 0) {
+      createSpan.innerText = `${gameState.playerOrder.firstPlayer} wins the game! Play again?`;
+    }
+    else {
+      createSpan.innerText = `${gameState.playerOrder.secondPlayer} wins the game! Play again?`;
+    }
     sectionPlayerHints.appendChild(createSpan);
-
   }
-}  
+};
+
     // Game Tied
 let isGameTied = () =>  {
   if (gameState.turn === 10 && !gameState.isGameWon) {
@@ -217,9 +282,8 @@ sectionPlayerOneName.addEventListener('submit', function(event) {
   } 
   else {
     gameState.playerNames[1] = 'COMPUTER';
-    console.log(gameState.playerNames);
-    playerOrder();
-    console.log(`1st player is ${firstPlayer}, 2nd player is ${secondPlayer}`);
+    gameState.playerOrder.firstPlayer = gameState.playerNames[0];
+    gameState.playerOrder.secondPlayer = gameState.playerNames[1];
     sectionTable.classList.toggle('hide');
     sectionPlayerHints.classList.toggle('hide');
     }
@@ -232,16 +296,41 @@ sectionPlayerTwoName.addEventListener('submit', function(event) {
     gameState.playerNames[1] = inputPlayerTwoName.value;
     inputPlayerTwoName.value = "";
     playerOrder();
-    console.log(`1st player is ${firstPlayer}, 2nd player is ${secondPlayer}`);
     sectionPlayerTwoName.classList.toggle('hide');
     sectionTable.classList.toggle('hide');
     sectionPlayerHints.classList.toggle('hide');
-    createSpan.innerText = `Welcome to Tic-Tac-Toe! To win the game, race to be the first to have your marks fill a row, column or diagonal! ${firstPlayer} is '${gameState.playerMarks[0].toUpperCase()}'s and gets to go first. ${secondPlayer} is '${gameState.playerMarks[1].toUpperCase()}'s and takes second turn. Turn 1: Begin!`;
+    createSpan.innerText = `Welcome to Tic-Tac-Toe! To win the game, race to be the first to have your marks fill a row, column or diagonal! ${gameState.playerOrder.firstPlayer} is '${gameState.playerMarks[0].toUpperCase()}'s and gets to go first. ${gameState.playerOrder.secondPlayer} is '${gameState.playerMarks[1].toUpperCase()}'s and takes second turn. Turn 1: Begin!`;
     sectionPlayerHints.appendChild(createSpan);
     sectionResetGame.classList.toggle('hide');
   });
 
     // Game Turns
+      // 1-Player Turn
+
+let onePlayerTurn = (event) => {
+  
+  let currentPlayer = gameState.playerMarks[0];
+  const target = event.target;
+  const parent = event.target.parentNode;
+
+  if (gameState.onePlayerGame) {
+    if (target.tagName === "TD" && target.innerText === "") {
+      target.innerText = currentPlayer;
+      gameState.board[parent.dataset.index][target.dataset.index] = currentPlayer;
+
+      //Run validators?
+      
+      gameState.playerMarks.reverse();
+      
+      computerTurn();
+      
+      gameState.playerMarks.reverse();
+    }
+  }
+};
+
+table.addEventListener('click', onePlayerTurn);
+
       // 2-Player Game
 
 let twoPlayerGameTurn = (event) => {
@@ -262,10 +351,10 @@ let twoPlayerGameTurn = (event) => {
       gameState.playerMarks.reverse();
       if (!gameState.isGameTied && !gameState.isGameWon) {
         if (gameState.turn % 2 === 0) {
-          createSpan.innerText = `Turn ${gameState.turn}: ${firstPlayer} just placed an '${gameState.playerMarks[1].toUpperCase()}'. ${secondPlayer}, it's your turn next. Place your ${gameState.playerMarks[0].toUpperCase()} on the board!`;
+          createSpan.innerText = `Turn ${gameState.turn}: ${gameState.playerOrder.firstPlayer} just placed an '${gameState.playerMarks[1].toUpperCase()}'. ${gameState.playerOrder.secondPlayer}, it's your turn next. Place your ${gameState.playerMarks[0].toUpperCase()} on the board!`;
         }
         else {
-          createSpan.innerText = `Turn ${gameState.turn}: ${secondPlayer} just placed an '${gameState.playerMarks[1].toUpperCase()}'. ${firstPlayer}, it's your turn next. Place your ${gameState.playerMarks[0].toUpperCase()} on the board!`;
+          createSpan.innerText = `Turn ${gameState.turn}: ${gameState.playerOrder.secondPlayer} just placed an '${gameState.playerMarks[1].toUpperCase()}'. ${gameState.playerOrder.firstPlayer}, it's your turn next. Place your ${gameState.playerMarks[0].toUpperCase()} on the board!`;
         }
         sectionPlayerHints.appendChild(createSpan);
       }
@@ -305,6 +394,9 @@ table.addEventListener('click', twoPlayerGameTurn);
     sectionTable.classList.toggle('hide');
     sectionPlayerHints.classList.toggle('hide');
     sectionResetGame.classList.toggle('hide');
+
+    gameState.playerOrder.firstPlayer = null;
+    gameState.playerOrder.secondPlayer = null;
 
   }
 
