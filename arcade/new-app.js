@@ -11,10 +11,10 @@ const gameState = {
     turn: 1,
     isGameWon: false,
     isGameTied: false,
-    computerPlayer: {
-      isCellEmpty: null,
-      checkRow: null, 
-      checkCell: null
+    comp: {
+      //isCellEmpty: null,
+      row: null, 
+      col: null
     },
     board: [
       [null, null, null],
@@ -171,59 +171,66 @@ let validateBoard = () => {
 
   // Game Turns
     // Computer
+      // Generate Random Numbers
+
+let randomRow = () => Math.floor(Math.random() * gameState.board.length);
+let randomCol = () => Math.floor(Math.random() * gameState.board.length);
 
 let computerTurn = () => {
   
-  let randomRow = gameState.computerPlayer.checkRow;
-  let randomCell = gameState.computerPlayer.checkCell;
+  gameState.comp.row = randomRow();
+  gameState.comp.col = randomCol();
       
-  let newRandomRow = () => Math.floor(Math.random() * gameState.board.length);
-  let newRandomCell = () => Math.floor(Math.random() * gameState.board.length);
+  // let isCellEmpty = () => {
+  //   if (gameState.board[gameState.computerPlayer.checkRow][gameState.computerPlayer.checkCol] !== null) {
+  //     gameState.computerPlayer.isCellEmpty = false;
+  //   }
+  //   else if (gameState.board[gameState.computerPlayer.checkRow][gameState.computerPlayer.checkCol] === null) {
+  //     gameState.computerPlayer.isCellEmpty = true;
+  //   }
+  // };
       
-  let isCellEmpty = () => {
-    randomRow = newRandomRow();
-    randomCell = newRandomCell();
-    if (gameState.board[randomRow][randomCell] !== null) {
-      gameState.computerPlayer.isCellEmpty = false;
+  // isCellEmpty();
+  
+  let fillSpace = () => {
+    if (gameState.comp.row === 0 && gameState.comp.col === 0) {
+      td00.innerText = 'o';
     }
-    else if (gameState.board[randomRow][randomCell] === null) {
-      gameState.computerPlayer.isCellEmpty = true;
+    if (gameState.comp.row === 0 && gameState.comp.col === 1) {
+      td01.innerText = 'o';
+    }
+    if (gameState.comp.row === 0 && gameState.comp.col === 2) {
+      td02.innerText = 'o';
+    }
+    if (gameState.comp.row === 1 && gameState.comp.col === 0) {
+      td10.innerText = 'o';
+    }
+    if (gameState.comp.row === 1 && gameState.comp.col === 1) {
+      td11.innerText = 'o';
+    }
+    if (gameState.comp.row === 1 && gameState.comp.col === 2) {
+      td12.innerText = 'o';
+    }
+    if (gameState.comp.row === 2 && gameState.comp.col === 0) {
+      td20.innerText = 'o';
+    }
+    if (gameState.comp.row === 2 && gameState.comp.col === 1) {
+      td21.innerText = 'o';
+    }
+    if (gameState.comp.row === 2 && gameState.comp.col === 2) {
+      td22.innerText = 'o';
     }
   };
-      
-  isCellEmpty();
-      
-  if (!gameState.computerPlayer.isCellEmpty) {
-    isCellEmpty();
-  }
-  if (gameState.computerPlayer.isCellEmpty) {
-    gameState.board[randomRow][randomCell] = gameState.playerMarks[0];
-    if (randomRow === 0 && randomCell === 0) {
-      td00.innerText = gameState.playerMarks[0];
+
+  if (gameState.turn < 9) { 
+    if (gameState.board[gameState.comp.row][gameState.comp.col] === null) {
+      gameState.board[gameState.comp.row][gameState.comp.col] = 'o';
+      fillSpace();
     }
-    if (randomRow === 0 && randomCell === 1) {
-      td01.innerText = gameState.playerMarks[0];
-    }
-    if (randomRow === 0 && randomCell === 2) {
-      td02.innerText = gameState.playerMarks[0];
-    }
-    if (randomRow === 1 && randomCell === 0) {
-      td10.innerText = gameState.playerMarks[0];
-    }
-    if (randomRow === 1 && randomCell === 1) {
-      td11.innerText = gameState.playerMarks[0];
-    }
-    if (randomRow === 1 && randomCell === 2) {
-      td12.innerText = gameState.playerMarks[0];
-    }
-    if (randomRow === 2 && randomCell === 0) {
-      td20.innerText = gameState.playerMarks[0];
-    }
-    if (randomRow === 2 && randomCell === 1) {
-      td21.innerText = gameState.playerMarks[0];
-    }
-    if (randomRow === 2 && randomCell === 2) {
-      td22.innerText = gameState.playerMarks[0];
+
+    else {
+      console.log('Error, cell is full!');
+      computerTurn();
     }
   }
 };
