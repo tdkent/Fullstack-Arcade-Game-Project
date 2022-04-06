@@ -12,7 +12,6 @@ const gameState = {
     isGameWon: false,
     isGameTied: false,
     comp: {
-      //isCellEmpty: null,
       row: null, 
       col: null
     },
@@ -180,58 +179,64 @@ let computerTurn = () => {
   
   gameState.comp.row = randomRow();
   gameState.comp.col = randomCol();
-      
-  // let isCellEmpty = () => {
-  //   if (gameState.board[gameState.computerPlayer.checkRow][gameState.computerPlayer.checkCol] !== null) {
-  //     gameState.computerPlayer.isCellEmpty = false;
-  //   }
-  //   else if (gameState.board[gameState.computerPlayer.checkRow][gameState.computerPlayer.checkCol] === null) {
-  //     gameState.computerPlayer.isCellEmpty = true;
-  //   }
-  // };
-      
-  // isCellEmpty();
-  
+  let currentPlayer = gameState.playerMarks[0];
+
   let fillSpace = () => {
     if (gameState.comp.row === 0 && gameState.comp.col === 0) {
-      td00.innerText = 'o';
+      td00.innerText = currentPlayer;
     }
     if (gameState.comp.row === 0 && gameState.comp.col === 1) {
-      td01.innerText = 'o';
+      td01.innerText = currentPlayer;
     }
     if (gameState.comp.row === 0 && gameState.comp.col === 2) {
-      td02.innerText = 'o';
+      td02.innerText = currentPlayer;
     }
     if (gameState.comp.row === 1 && gameState.comp.col === 0) {
-      td10.innerText = 'o';
+      td10.innerText = currentPlayer;
     }
     if (gameState.comp.row === 1 && gameState.comp.col === 1) {
-      td11.innerText = 'o';
+      td11.innerText = currentPlayer;
     }
     if (gameState.comp.row === 1 && gameState.comp.col === 2) {
-      td12.innerText = 'o';
+      td12.innerText = currentPlayer;
     }
     if (gameState.comp.row === 2 && gameState.comp.col === 0) {
-      td20.innerText = 'o';
+      td20.innerText = currentPlayer;
     }
     if (gameState.comp.row === 2 && gameState.comp.col === 1) {
-      td21.innerText = 'o';
+      td21.innerText = currentPlayer;
     }
     if (gameState.comp.row === 2 && gameState.comp.col === 2) {
-      td22.innerText = 'o';
+      td22.innerText = currentPlayer;
     }
   };
 
   if (gameState.turn < 9) { 
     if (gameState.board[gameState.comp.row][gameState.comp.col] === null) {
-      gameState.board[gameState.comp.row][gameState.comp.col] = 'o';
+      gameState.board[gameState.comp.row][gameState.comp.col] = currentPlayer;
+      gameState.turn += 1;
+
       fillSpace();
+      validateBoard();
+      isGameWon();
+      isGameTied();
+      
+      if (!gameState.isGameTied && !gameState.isGameWon) {
+        createSpan.innerText = `Turn ${gameState.turn}: ${gameState.playerOrder.secondPlayer} just placed an '${gameState.playerMarks[0].toUpperCase()}'. ${gameState.playerOrder.firstPlayer}, it's your turn!`;
+        sectionPlayerHints.appendChild(createSpan);
+      }
+      if (gameState.isGameTied) {
+        createSpan.innerText = `The game has ended in a tie. Play again?`;
+        sectionPlayerHints.appendChild(createSpan);
+      }
     }
 
     else {
-      console.log('Error, cell is full!');
       computerTurn();
     }
+    
+    gameState.playerMarks.reverse();
+
   }
 };
 
@@ -288,11 +293,14 @@ sectionPlayerOneName.addEventListener('submit', function(event) {
     sectionPlayerTwoName.classList.toggle('hide');
   } 
   else {
-    gameState.playerNames[1] = 'COMPUTER';
+    gameState.playerNames[1] = 'PAL 9000';
     gameState.playerOrder.firstPlayer = gameState.playerNames[0];
     gameState.playerOrder.secondPlayer = gameState.playerNames[1];
     sectionTable.classList.toggle('hide');
     sectionPlayerHints.classList.toggle('hide');
+    createSpan.innerText = `Welcome to Tic-Tac-Toe! To win the game, race to be the first to have your marks fill a row, column or diagonal! ${gameState.playerOrder.firstPlayer} is '${gameState.playerMarks[0].toUpperCase()}'s and gets to go first. ${gameState.playerOrder.secondPlayer} is '${gameState.playerMarks[1].toUpperCase()}'s and takes second turn. Turn 1: Begin!`;
+    sectionPlayerHints.appendChild(createSpan);
+    sectionResetGame.classList.toggle('hide');
     }
   });
 
@@ -321,17 +329,31 @@ let onePlayerTurn = (event) => {
   const parent = event.target.parentNode;
 
   if (gameState.onePlayerGame) {
-    if (target.tagName === "TD" && target.innerText === "") {
-      target.innerText = currentPlayer;
-      gameState.board[parent.dataset.index][target.dataset.index] = currentPlayer;
+    if (!gameState.isGameWon) {
+      if (target.tagName === "TD" && target.innerText === "") {
+        target.innerText = currentPlayer;
+        gameState.board[parent.dataset.index][target.dataset.index] = currentPlayer;
+        gameState.turn += 1;
 
-      //Run validators?
+        validateBoard();
+        isGameWon();
+        isGameTied();
       
-      gameState.playerMarks.reverse();
+        gameState.playerMarks.reverse();
+
+        if (!gameState.isGameTied && !gameState.isGameWon) {
+          createSpan.innerText = `Turn ${gameState.turn}: ${gameState.playerOrder.firstPlayer} just placed an '${gameState.playerMarks[1].toUpperCase()}'. ${gameState.playerOrder.secondPlayer} is processing options. Just a moment. Just a moment.`;
+          sectionPlayerHints.appendChild(createSpan);
+        }
+        if(gameState.isGameTied) {
+          createSpan.innerText = `The game has ended in a tie. Play again?`;
+          sectionPlayerHints.appendChild(createSpan);
+        }
       
-      computerTurn();
-      
-      gameState.playerMarks.reverse();
+        if (!gameState.isGameWon) {
+          setTimeout(() => {computerTurn()}, 2500);
+        }
+      }
     }
   }
 };
@@ -356,6 +378,7 @@ let twoPlayerGameTurn = (event) => {
       isGameTied();
 
       gameState.playerMarks.reverse();
+
       if (!gameState.isGameTied && !gameState.isGameWon) {
         if (gameState.turn % 2 === 0) {
           createSpan.innerText = `Turn ${gameState.turn}: ${gameState.playerOrder.firstPlayer} just placed an '${gameState.playerMarks[1].toUpperCase()}'. ${gameState.playerOrder.secondPlayer}, it's your turn next. Place your ${gameState.playerMarks[0].toUpperCase()} on the board!`;
@@ -405,6 +428,6 @@ table.addEventListener('click', twoPlayerGameTurn);
     gameState.playerOrder.firstPlayer = null;
     gameState.playerOrder.secondPlayer = null;
 
-  }
+  };
 
   sectionResetGame.addEventListener('click', resetGame);
