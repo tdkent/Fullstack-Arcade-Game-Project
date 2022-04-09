@@ -183,30 +183,39 @@ let computerTurn = () => {
 
   let fillSpace = () => {
     if (gameState.comp.row === 0 && gameState.comp.col === 0) {
+      td00.classList.toggle('robot-text');
       td00.innerText = currentPlayer;
     }
     if (gameState.comp.row === 0 && gameState.comp.col === 1) {
+      td01.classList.toggle('robot-text');
       td01.innerText = currentPlayer;
     }
     if (gameState.comp.row === 0 && gameState.comp.col === 2) {
+      td02.classList.toggle('robot-text');
       td02.innerText = currentPlayer;
     }
     if (gameState.comp.row === 1 && gameState.comp.col === 0) {
+      td10.classList.toggle('robot-text');
       td10.innerText = currentPlayer;
     }
     if (gameState.comp.row === 1 && gameState.comp.col === 1) {
+      td11.classList.toggle('robot-text');
       td11.innerText = currentPlayer;
     }
     if (gameState.comp.row === 1 && gameState.comp.col === 2) {
+      td12.classList.toggle('robot-text');
       td12.innerText = currentPlayer;
     }
     if (gameState.comp.row === 2 && gameState.comp.col === 0) {
+      td20.classList.toggle('robot-text');
       td20.innerText = currentPlayer;
     }
     if (gameState.comp.row === 2 && gameState.comp.col === 1) {
+      td21.classList.toggle('robot-text');
       td21.innerText = currentPlayer;
     }
     if (gameState.comp.row === 2 && gameState.comp.col === 2) {
+      td22.classList.toggle('robot-text');
       td22.innerText = currentPlayer;
     }
   };
@@ -222,11 +231,11 @@ let computerTurn = () => {
       isGameTied();
       
       if (!gameState.isGameTied && !gameState.isGameWon) {
-        createSpan.innerText = `Turn ${gameState.turn}: ${gameState.playerOrder.secondPlayer} just placed an '${gameState.playerMarks[0].toUpperCase()}'. ${gameState.playerOrder.firstPlayer}, it's your turn!`;
+        createSpan.innerHTML = `<p>Turn ${gameState.turn}: <span class="bold">${gameState.playerOrder.secondPlayer}</span> just placed an '${gameState.playerMarks[0].toUpperCase()}'. <span class="bold">${gameState.playerOrder.firstPlayer}</span>, it's your turn!</p>`;
         sectionPlayerHints.appendChild(createSpan);
       }
       if (gameState.isGameTied) {
-        createSpan.innerText = `The game has ended in a tie. Play again?`;
+        createSpan.innerHTML = `<p>The game has ended in a tie. Play again?</p>`;
         sectionPlayerHints.appendChild(createSpan);
       }
 
@@ -246,10 +255,10 @@ let computerTurn = () => {
 let isGameWon = () => {
   if (gameState.isGameWon) {
     if (gameState.turn % 2 === 0) {
-      createSpan.innerText = `${gameState.playerOrder.firstPlayer} wins the game! Play again?`;
+      createSpan.innerHTML = `<p><span class="bold">${gameState.playerOrder.firstPlayer}</span> wins the game! Play again?</p>`;
     }
     else {
-      createSpan.innerText = `${gameState.playerOrder.secondPlayer} wins the game! Play again?`;
+      createSpan.innerHTML = `<p><span class="bold">${gameState.playerOrder.secondPlayer}</span> wins the game! Play again?</p>`;
     }
     sectionPlayerHints.appendChild(createSpan);
   }
@@ -302,7 +311,7 @@ sectionPlayerOneName.addEventListener('submit', function(event) {
     gameState.playerOrder.secondPlayer = gameState.playerNames[1];
     sectionTable.classList.toggle('hide');
     sectionPlayerHints.classList.toggle('hide');
-    createSpan.innerHTML = `<p>Welcome to Tic-Tac-Toe! To win the game, race to be the first to have your marks fill a row, column or diagonal!</p><p>${gameState.playerOrder.firstPlayer} is '${gameState.playerMarks[0].toUpperCase()}'s and gets to go first.${gameState.playerOrder.secondPlayer} is '${gameState.playerMarks[1].toUpperCase()}'s and takes second turn.</p><p>Turn 1: Begin!</p>`;
+    createSpan.innerHTML = `<p>Welcome to Tic-Tac-Toe! To win the game, race to be the first to have your marks fill a row, column or diagonal!</p><p><span class="bold">${gameState.playerOrder.firstPlayer}</span> is '${gameState.playerMarks[0].toUpperCase()}'s and gets to go first. <span class="bold">${gameState.playerOrder.secondPlayer}</span> is '${gameState.playerMarks[1].toUpperCase()}'s and takes second turn.</p><p>Turn 1: Begin!</p>`;
     sectionPlayerHints.appendChild(createSpan);
     sectionResetGame.classList.toggle('hide');
     }
@@ -319,7 +328,7 @@ sectionPlayerTwoName.addEventListener('submit', function(event) {
     sectionPlayerTwoName.classList.toggle('flex');
     sectionTable.classList.toggle('hide');
     sectionPlayerHints.classList.toggle('hide');
-    createSpan.innerText = `Welcome to Tic-Tac-Toe! To win the game, race to be the first to have your marks fill a row, column or diagonal! ${gameState.playerOrder.firstPlayer} is '${gameState.playerMarks[0].toUpperCase()}'s and gets to go first. ${gameState.playerOrder.secondPlayer} is '${gameState.playerMarks[1].toUpperCase()}'s and takes second turn. Turn 1: Begin!`;
+    createSpan.innerHTML = `<p>Welcome to Tic-Tac-Toe! To win the game, race to be the first to have your marks fill a row, column or diagonal!</p><p><span class="bold">${gameState.playerOrder.firstPlayer}</span> is '${gameState.playerMarks[0].toUpperCase()}'s and gets to go first. <span class="bold">${gameState.playerOrder.secondPlayer}</span> is '${gameState.playerMarks[1].toUpperCase()}'s and takes second turn.</p><p>Turn 1: Begin!</p>`;
     sectionPlayerHints.appendChild(createSpan);
     sectionResetGame.classList.toggle('hide');
   });
@@ -336,6 +345,7 @@ let onePlayerTurn = (event) => {
   if (gameState.onePlayerGame) {
     if (!gameState.isGameWon) {
       if (target.tagName === "TD" && target.innerText === "") {
+        target.classList.toggle('player-one-text');
         target.innerText = currentPlayer;
         gameState.board[parent.dataset.index][target.dataset.index] = currentPlayer;
         gameState.turn += 1;
@@ -347,16 +357,16 @@ let onePlayerTurn = (event) => {
         gameState.playerMarks.reverse();
 
         if (!gameState.isGameTied && !gameState.isGameWon) {
-          createSpan.innerText = `Turn ${gameState.turn}: ${gameState.playerOrder.firstPlayer} just placed an '${gameState.playerMarks[1].toUpperCase()}'. ${gameState.playerOrder.secondPlayer} is processing options. Just a moment. Just a moment.`;
+          createSpan.innerHTML = `<p>Turn ${gameState.turn}:</p><p><span class="bold">${gameState.playerOrder.firstPlayer}</span> just placed an '${gameState.playerMarks[1].toUpperCase()}'. <span class="bold">${gameState.playerOrder.secondPlayer}</span> is processing options.</p><p>Just a moment. Just a moment.</p>`;
           sectionPlayerHints.appendChild(createSpan);
         }
         if(gameState.isGameTied) {
-          createSpan.innerText = `The game has ended in a tie. Play again?`;
+          createSpan.innerHTML = `<p>The game has ended in a tie. Play again?</p>`;
           sectionPlayerHints.appendChild(createSpan);
         }
       
         if (!gameState.isGameWon) {
-          setTimeout(() => {computerTurn()}, 3000);
+          setTimeout(() => {computerTurn()}, 4000);
         }
       }
     }
@@ -374,6 +384,13 @@ let twoPlayerGameTurn = (event) => {
 
   if (!gameState.onePlayerGame && !gameState.isGameWon) {
     if (target.tagName === "TD" && target.innerText === "") {
+      
+      if (gameState.turn % 2 === 1) {
+        target.classList.toggle('player-one-text');
+      }
+      if (gameState.turn % 2 === 0) {
+        target.classList.toggle('player-two-text');
+      }
       gameState.turn += 1;
       target.innerText = currentPlayer;
       gameState.board[parent.dataset.index][target.dataset.index] = currentPlayer;
@@ -386,15 +403,15 @@ let twoPlayerGameTurn = (event) => {
 
       if (!gameState.isGameTied && !gameState.isGameWon) {
         if (gameState.turn % 2 === 0) {
-          createSpan.innerText = `Turn ${gameState.turn}: ${gameState.playerOrder.firstPlayer} just placed an '${gameState.playerMarks[1].toUpperCase()}'. ${gameState.playerOrder.secondPlayer}, it's your turn next. Place your ${gameState.playerMarks[0].toUpperCase()} on the board!`;
+          createSpan.innerHTML = `<p>Turn ${gameState.turn}:</p><p><span class="bold">${gameState.playerOrder.firstPlayer}</span> just placed an '${gameState.playerMarks[1].toUpperCase()}'. <span class="bold">${gameState.playerOrder.secondPlayer}</span>, it's your turn next. Place your ${gameState.playerMarks[0].toUpperCase()} on the board!</p>`;
         }
         else {
-          createSpan.innerText = `Turn ${gameState.turn}: ${gameState.playerOrder.secondPlayer} just placed an '${gameState.playerMarks[1].toUpperCase()}'. ${gameState.playerOrder.firstPlayer}, it's your turn next. Place your ${gameState.playerMarks[0].toUpperCase()} on the board!`;
+          createSpan.innerHTML = `<p>Turn ${gameState.turn}:</p><p><span class="bold">${gameState.playerOrder.secondPlayer}</span> just placed an '${gameState.playerMarks[1].toUpperCase()}'. <span class="bold">${gameState.playerOrder.firstPlayer}</span>, it's your turn next. Place your ${gameState.playerMarks[0].toUpperCase()} on the board!</p>`;
         }
         sectionPlayerHints.appendChild(createSpan);
       }
       if(gameState.isGameTied) {
-        createSpan.innerText = `The game has ended in a tie. Play again?`;
+        createSpan.innerHTML = `<p>The game has ended in a tie. Play again?</p>`;
         sectionPlayerHints.appendChild(createSpan);
       }
     }
@@ -424,6 +441,16 @@ table.addEventListener('click', twoPlayerGameTurn);
     td20.innerText = "";
     td21.innerText = "";
     td22.innerText = "";
+
+    td00.className = "";
+    td01.className = "";
+    td02.className = "";
+    td10.className = "";
+    td11.className = "";
+    td12.className = "";
+    td20.className = "";
+    td21.className = "";
+    td22.className = "";
     
     sectionSelectGameMode.classList.toggle('hide');
     sectionTable.classList.toggle('hide');

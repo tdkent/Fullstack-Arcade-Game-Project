@@ -16,35 +16,35 @@
         <section id="select-game-mode">
             <h2>Select Game Mode</h2>
             <h4>Player vs. Computer</h4>
-            <button id="button-one-player-game">1-Player Game</button>
+            <button id="button-one-player-game" class="button-player-select button-blue">1-Player Game</button>
             <h4>Player vs. Player</h4>
-            <button id="button-two-player-game">2-Player Game</button>
+            <button id="button-two-player-game" class="button-player-select button-red">2-Player Game</button>
         </section>
         <section id="section-player-one-name" class="hide">
             <form id="form-player-one-name">
                 <label for="input-player-one-name">Player 1:</label>
-                <input type="text" name="input-player-one-name" id="input-player-one-name">
-                <button>Enter Name</button>
+                <input type="text" name="input-player-one-name" id="input-player-one-name" min="1" required>
+                <button class = "button-enter-name">Enter Name</button>
             </form>
         </section>
         <section id="section-player-two-name" class="hide">
             <form id="form-player-two-name">
                 <label for="input-player-two-name">Player 2:</label>
-                <input type="text" name="input-player-two-name" id="input-player-two-name">
-                <button>Enter Name</button>
+                <input type="text" name="input-player-two-name" id="input-player-two-name" min="1" required>
+                <button class = "button-enter-name">Enter Name</button>
             </form>
         </section>
         <section class="hide" id="section-start-game">
             <button>Start Game</button>
         </section>
         <section id="section-table" class="hide">
-            <table>
+            <table class="collapse">
                 <tr data-index="0">
                     <td data-index="0" id="c-00"></td>
                     <td data-index="1" id="c-01"></td>
                     <td data-index="2" id="c-02"></td>
                 </tr>
-                <tr data-index="1">
+                <tr data-index="1" class="middle">
                     <td data-index="0" id="c-10"></td>
                     <td data-index="1" id="c-11"></td>
                     <td data-index="2" id="c-12"></td>
@@ -58,7 +58,7 @@
         </section>
         <section id="section-player-hints" class="hide"></section>
         <section id="section-reset-game" class="hide">
-            <button>Reset Game</button>
+            <button class="button-reset-game">Reset Game</button>
         </section>
     </main>
     <footer>
