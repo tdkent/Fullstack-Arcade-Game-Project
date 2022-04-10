@@ -343,6 +343,10 @@ span p {
     #section-player-hints {
         width: 100%;
     }
+
+    #page-container {
+        min-height: 100%;
+    }
     
     /* Forms */
 
@@ -358,7 +362,8 @@ span p {
     input {
         font-family: 'Open Sans', sans-serif;
         padding:4px;
-        margin: 40px 10px;
+        margin: 40px 0;
+        max-width: 100%;
     }
 
     /* Table */
