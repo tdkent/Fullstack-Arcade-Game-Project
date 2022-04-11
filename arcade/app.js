@@ -64,6 +64,7 @@ const td22 = document.querySelector('#c-22');
 const createSpan = document.createElement('span');
 
 // Helper Functions
+
   // Choose Player Order
 
 let playerOrder = () => {
@@ -281,6 +282,7 @@ buttonOnePlayerGame.addEventListener('click', function() {
     sectionSelectGameMode.classList.toggle('hide');
     sectionPlayerOneName.classList.toggle('hide');
     sectionPlayerOneName.classList.toggle('flex');
+    inputPlayerOneName.focus();
 });
     
     // 2-Player Game
@@ -290,6 +292,7 @@ buttonTwoPlayerGame.addEventListener('click', function() {
     sectionSelectGameMode.classList.toggle('hide');
     sectionPlayerOneName.classList.toggle('hide');
     sectionPlayerOneName.classList.toggle('flex');
+    inputPlayerOneName.focus();
 });
 
   // Name Entry
@@ -304,6 +307,7 @@ sectionPlayerOneName.addEventListener('submit', function(event) {
   if (!gameState.onePlayerGame) {
     sectionPlayerTwoName.classList.toggle('hide');
     sectionPlayerTwoName.classList.toggle('flex');
+    inputPlayerTwoName.focus();
   } 
   else {
     gameState.playerNames[1] = 'PAL 9000';
@@ -403,10 +407,10 @@ let twoPlayerGameTurn = (event) => {
 
       if (!gameState.isGameTied && !gameState.isGameWon) {
         if (gameState.turn % 2 === 0) {
-          createSpan.innerHTML = `<p>Turn ${gameState.turn}:</p><p><span class="bold">${gameState.playerOrder.firstPlayer}</span> just placed an '${gameState.playerMarks[1].toUpperCase()}'. <span class="bold">${gameState.playerOrder.secondPlayer}</span>, it's your turn next. Place your ${gameState.playerMarks[0].toUpperCase()} on the board!</p>`;
+          createSpan.innerHTML = `<p>Turn ${gameState.turn}:</p><p><span class="bold">${gameState.playerOrder.firstPlayer}</span> just placed an '${gameState.playerMarks[1].toUpperCase()}'. <span class="bold">${gameState.playerOrder.secondPlayer}</span>, it's your turn next. Place your '${gameState.playerMarks[0].toUpperCase()}' on the board!</p>`;
         }
         else {
-          createSpan.innerHTML = `<p>Turn ${gameState.turn}:</p><p><span class="bold">${gameState.playerOrder.secondPlayer}</span> just placed an '${gameState.playerMarks[1].toUpperCase()}'. <span class="bold">${gameState.playerOrder.firstPlayer}</span>, it's your turn next. Place your ${gameState.playerMarks[0].toUpperCase()} on the board!</p>`;
+          createSpan.innerHTML = `<p>Turn ${gameState.turn}:</p><p><span class="bold">${gameState.playerOrder.secondPlayer}</span> just placed an '${gameState.playerMarks[1].toUpperCase()}'. <span class="bold">${gameState.playerOrder.firstPlayer}</span>, it's your turn next. Place your '${gameState.playerMarks[0].toUpperCase()}' on the board!</p>`;
         }
         sectionPlayerHints.appendChild(createSpan);
       }

@@ -403,8 +403,10 @@ span p {
 
     h1 {
         font-size:10vw;
-    }
+    }    
+}
 
+@media screen and (max-height:1050px) {
     footer {
         position: relative;
     }
