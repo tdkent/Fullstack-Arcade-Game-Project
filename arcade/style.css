@@ -331,7 +331,7 @@ span p {
 
 /* Small Screen */
 
-@media screen and (max-width:800px) and (max-height:1050px) {
+@media screen and (max-width:800px) {
 
     #page-container {
         position: relative;
